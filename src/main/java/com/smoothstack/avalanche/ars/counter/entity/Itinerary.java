@@ -142,4 +142,60 @@ public class Itinerary {
 		this.date_created = date_created;
 	}
 	
+	/*
+	 * OVERRIDE OBJECT METHOD
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((agency_id == null) ? 0 : agency_id.hashCode());
+		result = prime * result + ((date_created == null) ? 0 : date_created.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		long temp;
+		temp = Double.doubleToLongBits(price_total);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		result = prime * result + ((traveler_id == null) ? 0 : traveler_id.hashCode());
+		result = prime * result + ((user_id == null) ? 0 : user_id.hashCode());
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Itinerary other = (Itinerary) obj;
+		if (agency_id == null) {
+			if (other.agency_id != null)
+				return false;
+		} else if (!agency_id.equals(other.agency_id))
+			return false;
+		if (date_created == null) {
+			if (other.date_created != null)
+				return false;
+		} else if (!date_created.equals(other.date_created))
+			return false;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (Double.doubleToLongBits(price_total) != Double.doubleToLongBits(other.price_total))
+			return false;
+		if (traveler_id == null) {
+			if (other.traveler_id != null)
+				return false;
+		} else if (!traveler_id.equals(other.traveler_id))
+			return false;
+		if (user_id == null) {
+			if (other.user_id != null)
+				return false;
+		} else if (!user_id.equals(other.user_id))
+			return false;
+		return true;
+	}
+	
 }

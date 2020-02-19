@@ -115,8 +115,7 @@ public class Flight {
 	
 	/*
 	 * SETTERS
-	 */
-	
+	 */	
 	/**
 	 * @param id the id to set
 	 */
@@ -158,6 +157,65 @@ public class Flight {
 	 */
 	public void setDeparture_date(Date departure_date) {
 		this.departure_date = departure_date;
+	}
+	
+	/*
+	 * OVERRIDE OBJECT METHODS
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((arrival_date == null) ? 0 : arrival_date.hashCode());
+		result = prime * result + capacity;
+		result = prime * result + ((departure_date == null) ? 0 : departure_date.hashCode());
+		result = prime * result + ((dest == null) ? 0 : dest.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((origin == null) ? 0 : origin.hashCode());
+		long temp;
+		temp = Double.doubleToLongBits(price);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Flight other = (Flight) obj;
+		if (arrival_date == null) {
+			if (other.arrival_date != null)
+				return false;
+		} else if (!arrival_date.equals(other.arrival_date))
+			return false;
+		if (capacity != other.capacity)
+			return false;
+		if (departure_date == null) {
+			if (other.departure_date != null)
+				return false;
+		} else if (!departure_date.equals(other.departure_date))
+			return false;
+		if (dest == null) {
+			if (other.dest != null)
+				return false;
+		} else if (!dest.equals(other.dest))
+			return false;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (origin == null) {
+			if (other.origin != null)
+				return false;
+		} else if (!origin.equals(other.origin))
+			return false;
+		if (Double.doubleToLongBits(price) != Double.doubleToLongBits(other.price))
+			return false;
+		return true;
 	}
 
 	

@@ -71,7 +71,6 @@ public class BoardingPass {
 	/*
 	 * SETTERS
 	 */
-	
 	/**
 	 * @param id the id to set
 	 */
@@ -89,6 +88,46 @@ public class BoardingPass {
 	 */
 	public void setTerminal_number(String terminal_number) {
 		this.terminal_number = terminal_number;
+	}
+
+	/*
+	 * OVERRIDE OBJECT METHODS
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((gate_number == null) ? 0 : gate_number.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((terminal_number == null) ? 0 : terminal_number.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		BoardingPass other = (BoardingPass) obj;
+		if (gate_number == null) {
+			if (other.gate_number != null)
+				return false;
+		} else if (!gate_number.equals(other.gate_number))
+			return false;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (terminal_number == null) {
+			if (other.terminal_number != null)
+				return false;
+		} else if (!terminal_number.equals(other.terminal_number))
+			return false;
+		return true;
 	}
 	
 	
