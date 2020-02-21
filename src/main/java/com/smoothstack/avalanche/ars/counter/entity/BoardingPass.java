@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -30,6 +31,7 @@ public class BoardingPass {
 	 * ENTITY RELATIONSHIP
 	 */
 	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "ticket_id")
 	private Ticket ticket;
 	/*
 	 * CONSTRUCTORS
@@ -42,7 +44,6 @@ public class BoardingPass {
 	 * @param terminal_number
 	 */
 	public BoardingPass(Long id, String gate_number, String terminal_number) {
-		super();
 		this.id = id;
 		this.gate_number = gate_number;
 		this.terminal_number = terminal_number;

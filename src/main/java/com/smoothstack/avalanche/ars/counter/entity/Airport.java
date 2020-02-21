@@ -43,12 +43,12 @@ public class Airport {
 	/*
 	 * ENTITY RELATIONSHIP
 	 */
-	@OneToMany(mappedBy = "destAirport",
+	@OneToMany(mappedBy = "dest_airport",
 			cascade = CascadeType.ALL,
 			orphanRemoval = true)
 	private List<Flight> destFlights;
 	
-	@OneToMany(mappedBy = "originAirport",
+	@OneToMany(mappedBy = "origin_airport",
 			cascade = CascadeType.ALL,
 			orphanRemoval = true)
 	private List<Flight> originFlights;
@@ -68,7 +68,6 @@ public class Airport {
 	 * @param postal_cude
 	 */
 	public Airport(Long id, String name, String street, String country, String state, String city, String postal_cude) {
-		super();
 		this.id = id;
 		this.name = name;
 		this.street = street;

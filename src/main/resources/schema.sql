@@ -29,7 +29,6 @@ CREATE TABLE `flight` (
   `arrival_date` DATETIME(2) NOT NULL,
   `departure_date` DATETIME(2) NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `origin_idx` (`origin` ASC) VISIBLE,
   CONSTRAINT `dest`
     FOREIGN KEY (`dest`)
     REFERENCES `airport` (`id`)
@@ -81,9 +80,7 @@ CREATE TABLE `travel_agency` (
   `state` VARCHAR(45) NULL,
   `city` VARCHAR(45) NULL,
   `postal_code` VARCHAR(45) NULL,
-  UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE,
   PRIMARY KEY (`id`),
-  INDEX `agency_id_idx` (`agency_id` ASC) VISIBLE,
   CONSTRAINT `agency_id`
     FOREIGN KEY (`agency_id`)
     REFERENCES `travel_agency` (`id`)
@@ -99,8 +96,6 @@ CREATE TABLE `itinerary` (
   `price_total` DOUBLE NOT NULL,
   `date_created` DATETIME(2) NULL,
   PRIMARY KEY (`id`),
-  INDEX `traveler_id_idx` (`traveler_id` ASC) VISIBLE,
-  INDEX `user_id_idx` (`user_id` ASC) VISIBLE,
   CONSTRAINT `traveler_id`
     FOREIGN KEY (`traveler_id`)
     REFERENCES `traveler` (`id`)
@@ -120,8 +115,6 @@ CREATE TABLE `ticket` (
   `status` ENUM('COMPLETE', 'ACTIVE', 'CANCELED') NULL,
   `seat_number` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `flight_number_idx` (`flight_number` ASC) VISIBLE,
-  INDEX `itinerary_idx` (`itinerary_id` ASC) VISIBLE,
   CONSTRAINT `flight_number`
     FOREIGN KEY (`flight_number`)
     REFERENCES `flight` (`id`)
@@ -140,7 +133,6 @@ CREATE TABLE `boarding_pass` (
   `gate_number` VARCHAR(45) NOT NULL,
   `terminal_number` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `ticket_id_idx` (`ticket_id` ASC) VISIBLE,
   CONSTRAINT `ticket_id`
     FOREIGN KEY (`ticket_id`)
     REFERENCES `ticket` (`id`)

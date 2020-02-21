@@ -81,7 +81,6 @@ public class Traveler {
 		 */
 		public Traveler(Long id, String first_name, String last_name, Date dob, String phone, String email,
 				String street, String country, String state, String city, String postal_cude) {
-			super();
 			this.id = id;
 			this.first_name = first_name;
 			this.last_name = last_name;

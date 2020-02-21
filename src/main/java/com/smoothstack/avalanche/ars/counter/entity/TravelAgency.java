@@ -59,7 +59,6 @@ public class TravelAgency {
 	 * @param commission_rate
 	 */
 	public TravelAgency(Long id, String name, String phone, String email, double commission_rate) {
-		super();
 		this.id = id;
 		this.name = name;
 		this.phone = phone;

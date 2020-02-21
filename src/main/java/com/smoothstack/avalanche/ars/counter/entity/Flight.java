@@ -8,6 +8,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -21,12 +22,6 @@ public class Flight {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
-	@Column(name = "dest")
-	private Long dest;
-	
-	@Column(name = "origin")
-	private Long origin;
 	
 	@Column(name = "capacity")
 	private int capacity;
@@ -44,10 +39,12 @@ public class Flight {
 	 * ENTITY RELATIONSHIPS
 	 */
 	@ManyToOne(fetch = FetchType.EAGER)
-	private Airport destAirport;
+	@JoinColumn(name = "dest")
+	private Airport dest_airport;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
-	private Airport originAirport;
+	@JoinColumn(name = "origin")
+	private Airport origin_airport;
 	/*
 	 * CONSTRUCTORS
 	 */
@@ -61,11 +58,8 @@ public class Flight {
 	 * @param arrival_date
 	 * @param departure_date
 	 */
-	public Flight(Long id, Long dest, Long origin, int capacity, double price, Date arrival_date, Date departure_date) {
-		super();
+	public Flight(Long id, int capacity, double price, Date arrival_date, Date departure_date) {
 		this.id = id;
-		this.dest = dest;
-		this.origin = origin;
 		this.capacity = capacity;
 		this.price = price;
 		this.arrival_date = arrival_date;
@@ -81,18 +75,6 @@ public class Flight {
 	 */
 	public Long getId() {
 		return id;
-	}
-	/**
-	 * @return the dest
-	 */
-	public Long getDest() {
-		return dest;
-	}
-	/**
-	 * @return the origin
-	 */
-	public Long getOrigin() {
-		return origin;
 	}
 	/**
 	 * @return the capacity
@@ -128,18 +110,7 @@ public class Flight {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	/**
-	 * @param dest the dest to set
-	 */
-	public void setDest(Long dest) {
-		this.dest = dest;
-	}
-	/**
-	 * @param origin the origin to set
-	 */
-	public void setOrigin(Long origin) {
-		this.origin = origin;
-	}
+
 	/**
 	 * @param capacity the capacity to set
 	 */
@@ -175,9 +146,7 @@ public class Flight {
 		result = prime * result + ((arrival_date == null) ? 0 : arrival_date.hashCode());
 		result = prime * result + capacity;
 		result = prime * result + ((departure_date == null) ? 0 : departure_date.hashCode());
-		result = prime * result + ((dest == null) ? 0 : dest.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((origin == null) ? 0 : origin.hashCode());
 		long temp;
 		temp = Double.doubleToLongBits(price);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
@@ -204,20 +173,10 @@ public class Flight {
 				return false;
 		} else if (!departure_date.equals(other.departure_date))
 			return false;
-		if (dest == null) {
-			if (other.dest != null)
-				return false;
-		} else if (!dest.equals(other.dest))
-			return false;
 		if (id == null) {
 			if (other.id != null)
 				return false;
 		} else if (!id.equals(other.id))
-			return false;
-		if (origin == null) {
-			if (other.origin != null)
-				return false;
-		} else if (!origin.equals(other.origin))
 			return false;
 		if (Double.doubleToLongBits(price) != Double.doubleToLongBits(other.price))
 			return false;

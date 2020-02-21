@@ -10,6 +10,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -33,9 +34,6 @@ public class User {
 		
 		@Column(name = "role")
 		private String role;
-		
-		@Column(name = "agency_id")
-		private Long agency_id;
 		
 		@Column(name = "first_name")
 		private String first_name;
@@ -69,6 +67,7 @@ public class User {
 		 */
 		
 		@ManyToOne(optional = true, fetch = FetchType.EAGER)
+		@JoinColumn(name = "agency_id")
 		private TravelAgency agency;
 		
 		@OneToMany(mappedBy = "user",
@@ -96,15 +95,13 @@ public class User {
 		 * @param city
 		 * @param postal_cude
 		 */
-		public User(Long id, String email, String password, String role, Long agency_id, String first_name,
+		public User(Long id, String email, String password, String role, String first_name,
 				String last_name, Date dob, String phone, String street, String country, String state, String city,
 				String postal_cude) {
-			super();
 			this.id = id;
 			this.email = email;
 			this.password = password;
 			this.role = role;
-			this.agency_id = agency_id;
 			this.first_name = first_name;
 			this.last_name = last_name;
 			this.dob = dob;
@@ -142,12 +139,6 @@ public class User {
 		 */
 		public String getRole() {
 			return role;
-		}
-		/**
-		 * @return the agency_id
-		 */
-		public Long getAgency_id() {
-			return agency_id;
 		}
 		/**
 		 * @return the first_name
@@ -232,12 +223,6 @@ public class User {
 			this.role = role;
 		}
 		/**
-		 * @param agency_id the agency_id to set
-		 */
-		public void setAgency_id(Long agency_id) {
-			this.agency_id = agency_id;
-		}
-		/**
 		 * @param first_name the first_name to set
 		 */
 		public void setFirst_name(String first_name) {
@@ -299,7 +284,6 @@ public class User {
 		public int hashCode() {
 			final int prime = 31;
 			int result = 1;
-			result = prime * result + ((agency_id == null) ? 0 : agency_id.hashCode());
 			result = prime * result + ((city == null) ? 0 : city.hashCode());
 			result = prime * result + ((country == null) ? 0 : country.hashCode());
 			result = prime * result + ((dob == null) ? 0 : dob.hashCode());
@@ -324,11 +308,6 @@ public class User {
 			if (getClass() != obj.getClass())
 				return false;
 			User other = (User) obj;
-			if (agency_id == null) {
-				if (other.agency_id != null)
-					return false;
-			} else if (!agency_id.equals(other.agency_id))
-				return false;
 			if (city == null) {
 				if (other.city != null)
 					return false;
