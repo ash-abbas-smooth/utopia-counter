@@ -1,10 +1,14 @@
 package com.smoothstack.avalanche.ars.counter.entity;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -33,6 +37,14 @@ public class Ticket {
 	/*
 	 * ENTITY RELATIONSHIPS
 	 */
+	@ManyToOne(fetch = FetchType.EAGER)
+	private Flight flight;
+	
+	@ManyToOne(fetch = FetchType.EAGER)
+	private Itinerary itinerary;
+	
+	@OneToOne(mappedBy = "ticket")
+	private BoardingPass boarding_pass;
 	
 	/*
 	 * CONSTRUCTORS

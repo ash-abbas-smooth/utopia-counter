@@ -39,7 +39,13 @@ public class CounterService {
 		}
 		return searchItinerary;
 	}
-	
-	
+	/*
+	 * Function for creating itinerary
+	 * Used for the endpoint:
+	 * POST: /counter/itineraries
+	 */
+	public void createItinerary(Itinerary itinerary) throws IllegalArgumentException{
+		
+	}
 	
 }

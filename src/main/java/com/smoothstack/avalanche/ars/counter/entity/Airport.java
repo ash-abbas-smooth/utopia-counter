@@ -1,12 +1,14 @@
 package com.smoothstack.avalanche.ars.counter.entity;
 
-import java.util.Objects;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -41,7 +43,16 @@ public class Airport {
 	/*
 	 * ENTITY RELATIONSHIP
 	 */
-
+	@OneToMany(mappedBy = "destAirport",
+			cascade = CascadeType.ALL,
+			orphanRemoval = true)
+	private List<Flight> destFlights;
+	
+	@OneToMany(mappedBy = "originAirport",
+			cascade = CascadeType.ALL,
+			orphanRemoval = true)
+	private List<Flight> originFlights;
+	
 	/*
 	 * CONSTRUCTORS
 	 */
