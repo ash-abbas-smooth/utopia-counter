@@ -15,6 +15,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "itinerary")
 public class Itinerary {
@@ -50,26 +52,34 @@ public class Itinerary {
 	@OneToMany(mappedBy = "itinerary",
 			cascade = CascadeType.ALL,
 			orphanRemoval = true)
+	@JsonIgnore
 	private List<Ticket> tickets;
 	
 	/*
 	 * CONSTRUCTOR
 	 */
 	public Itinerary() {}
+
 	/**
 	 * @param id
-	 * @param traveler_id
-	 * @param user_id
-	 * @param agency_id
 	 * @param price_total
 	 * @param date_created
+	 * @param agency
+	 * @param user
+	 * @param traveler
+	 * @param tickets
 	 */
-	public Itinerary(Long id, double price_total, Date date_created) {
+	public Itinerary(Long id, double price_total, Date date_created, TravelAgency agency, User user, Traveler traveler,
+			List<Ticket> tickets) {
+		super();
 		this.id = id;
 		this.price_total = price_total;
 		this.date_created = date_created;
+		this.agency = agency;
+		this.user = user;
+		this.traveler = traveler;
+		this.tickets = tickets;
 	}
-	
 	/*
 	 * GETTERS
 	 */
@@ -92,6 +102,30 @@ public class Itinerary {
 		return date_created;
 	}
 	
+	/**
+	 * @return the agency
+	 */
+	public TravelAgency getAgency() {
+		return agency;
+	}
+	/**
+	 * @return the user
+	 */
+	public User getUser() {
+		return user;
+	}
+	/**
+	 * @return the traveler
+	 */
+	public Traveler getTraveler() {
+		return traveler;
+	}
+	/**
+	 * @return the tickets
+	 */
+	public List<Ticket> getTickets() {
+		return tickets;
+	}
 	/*
 	 * SETTERS
 	 */
@@ -113,7 +147,30 @@ public class Itinerary {
 	public void setDate_created(Date date_created) {
 		this.date_created = date_created;
 	}
-	
+	/**
+	 * @param agency the agency to set
+	 */
+	public void setAgency(TravelAgency agency) {
+		this.agency = agency;
+	}
+	/**
+	 * @param user the user to set
+	 */
+	public void setUser(User user) {
+		this.user = user;
+	}
+	/**
+	 * @param traveler the traveler to set
+	 */
+	public void setTraveler(Traveler traveler) {
+		this.traveler = traveler;
+	}
+	/**
+	 * @param tickets the tickets to set
+	 */
+	public void setTickets(List<Ticket> tickets) {
+		this.tickets = tickets;
+	}
 	/*
 	 * OVERRIDE OBJECT METHOD
 	 */

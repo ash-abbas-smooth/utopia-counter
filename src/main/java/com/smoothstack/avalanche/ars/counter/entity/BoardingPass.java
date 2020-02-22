@@ -72,6 +72,13 @@ public class BoardingPass {
 		return terminal_number;
 	}
 	
+	/**
+	 * @return the ticket
+	 */
+	public Ticket getTicket() {
+		return ticket;
+	}
+
 	/*
 	 * SETTERS
 	 */
@@ -92,6 +99,12 @@ public class BoardingPass {
 	 */
 	public void setTerminal_number(String terminal_number) {
 		this.terminal_number = terminal_number;
+	}
+	/**
+	 * @param ticket the ticket to set
+	 */
+	public void setTicket(Ticket ticket) {
+		this.ticket = ticket;
 	}
 
 	/*

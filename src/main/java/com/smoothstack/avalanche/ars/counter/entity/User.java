@@ -15,6 +15,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "user")
 public class User {
@@ -60,7 +62,7 @@ public class User {
 		private String city;
 		
 		@Column(name = "postal_code")
-		private String postal_cude;
+		private String postal_code;
 
 		/*
 		 * ENTITY RELATIONSHIP
@@ -73,6 +75,7 @@ public class User {
 		@OneToMany(mappedBy = "user",
 				cascade = CascadeType.ALL,
 				orphanRemoval = true)
+		@JsonIgnore
 		private List<Itinerary> itineraries;
 		
 		/*
@@ -93,11 +96,11 @@ public class User {
 		 * @param country
 		 * @param state
 		 * @param city
-		 * @param postal_cude
+		 * @param postal_code
 		 */
 		public User(Long id, String email, String password, String role, String first_name,
 				String last_name, Date dob, String phone, String street, String country, String state, String city,
-				String postal_cude) {
+				String postal_code) {
 			this.id = id;
 			this.email = email;
 			this.password = password;
@@ -110,7 +113,7 @@ public class User {
 			this.country = country;
 			this.state = state;
 			this.city = city;
-			this.postal_cude = postal_cude;
+			this.postal_code = postal_code;
 		}
 		
 		/*
@@ -189,12 +192,24 @@ public class User {
 			return city;
 		}
 		/**
-		 * @return the postal_cude
+		 * @return the postal_code
 		 */
-		public String getPostal_cude() {
-			return postal_cude;
+		public String getPostal_code() {
+			return postal_code;
 		}
 		
+		/**
+		 * @return the agency
+		 */
+		public TravelAgency getAgency() {
+			return agency;
+		}
+		/**
+		 * @return the itineraries
+		 */
+		public List<Itinerary> getItineraries() {
+			return itineraries;
+		}
 		/*
 		 * SETTERS	
 		 */
@@ -271,12 +286,23 @@ public class User {
 			this.city = city;
 		}
 		/**
-		 * @param postal_cude the postal_cude to set
+		 * @param postal_code the postal_code to set
 		 */
-		public void setPostal_cude(String postal_cude) {
-			this.postal_cude = postal_cude;
+		public void setPostal_code(String postal_code) {
+			this.postal_code = postal_code;
 		}
-		
+		/**
+		 * @param agency the agency to set
+		 */
+		public void setAgency(TravelAgency agency) {
+			this.agency = agency;
+		}
+		/**
+		 * @param itineraries the itineraries to set
+		 */
+		public void setItineraries(List<Itinerary> itineraries) {
+			this.itineraries = itineraries;
+		}
 		/*
 		 * OVERRIDE OBJECT METHODS
 		 */
@@ -293,7 +319,7 @@ public class User {
 			result = prime * result + ((last_name == null) ? 0 : last_name.hashCode());
 			result = prime * result + ((password == null) ? 0 : password.hashCode());
 			result = prime * result + ((phone == null) ? 0 : phone.hashCode());
-			result = prime * result + ((postal_cude == null) ? 0 : postal_cude.hashCode());
+			result = prime * result + ((postal_code == null) ? 0 : postal_code.hashCode());
 			result = prime * result + ((role == null) ? 0 : role.hashCode());
 			result = prime * result + ((state == null) ? 0 : state.hashCode());
 			result = prime * result + ((street == null) ? 0 : street.hashCode());
@@ -353,10 +379,10 @@ public class User {
 					return false;
 			} else if (!phone.equals(other.phone))
 				return false;
-			if (postal_cude == null) {
-				if (other.postal_cude != null)
+			if (postal_code == null) {
+				if (other.postal_code != null)
 					return false;
-			} else if (!postal_cude.equals(other.postal_cude))
+			} else if (!postal_code.equals(other.postal_code))
 				return false;
 			if (role == null) {
 				if (other.role != null)

@@ -11,6 +11,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "ticket")
 public class Ticket {
@@ -23,7 +25,7 @@ public class Ticket {
 	private Long id;
 	
 	@Column(name = "status")
-	private Long status;
+	private String status;
 	
 	@Column(name = "seat_number")
 	private String seat_number;
@@ -37,9 +39,11 @@ public class Ticket {
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "itinerary_id")
+	@JsonIgnore
 	private Itinerary itinerary;
 	
 	@OneToOne(mappedBy = "ticket")
+	@JsonIgnore
 	private BoardingPass boarding_pass;
 	
 	/*
@@ -53,7 +57,7 @@ public class Ticket {
 	 * @param status
 	 * @param seat_number
 	 */
-	public Ticket(Long id, Long status, String seat_number) {
+	public Ticket(Long id, String status, String seat_number) {
 		this.id = id;
 		this.status = status;
 		this.seat_number = seat_number;
@@ -72,7 +76,7 @@ public class Ticket {
 	/**
 	 * @return the status
 	 */
-	public Long getStatus() {
+	public String getStatus() {
 		return status;
 	}
 	/**
@@ -82,6 +86,19 @@ public class Ticket {
 		return seat_number;
 	}
 	
+	/**
+	 * @return the flight
+	 */
+	public Flight getFlight() {
+		return flight;
+	}
+	/**
+	 * @return the boarding_pass
+	 */
+	public BoardingPass getBoarding_pass() {
+		return boarding_pass;
+	}
+
 	/*
 	 * SETTERS
 	 */
@@ -95,7 +112,7 @@ public class Ticket {
 	/**
 	 * @param status the status to set
 	 */
-	public void setStatus(Long status) {
+	public void setStatus(String status) {
 		this.status = status;
 	}
 	/**
@@ -104,7 +121,18 @@ public class Ticket {
 	public void setSeat_number(String seat_number) {
 		this.seat_number = seat_number;
 	}
-	
+	/**
+	 * @param flight the flight to set
+	 */
+	public void setFlight(Flight flight) {
+		this.flight = flight;
+	}
+	/**
+	 * @param boarding_pass the boarding_pass to set
+	 */
+	public void setBoarding_pass(BoardingPass boarding_pass) {
+		this.boarding_pass = boarding_pass;
+	}
 	/*
 	 * OVERRIDE OBJECT METHOD
 	 */
