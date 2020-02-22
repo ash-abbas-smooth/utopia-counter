@@ -5,6 +5,8 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.smoothstack.avalanche.ars.counter.entity.Flight;
 import com.smoothstack.avalanche.ars.counter.entity.Itinerary;
@@ -36,7 +39,12 @@ public class CounterController {
 	 */
 	@GetMapping(path = "/itineraries")
 	public ResponseEntity<List<Itinerary>> readItineraries() throws NotFoundException {
-		return null;
+		try{
+			List<Itinerary> searchItinerary = counterService.readItineraries();
+			return new ResponseEntity<List<Itinerary>>(searchItinerary, new HttpHeaders(), HttpStatus.OK);
+		} catch(NotFoundException e) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+		}
 	}
 	/*
 	 * Post Endpoint: /itineraries
@@ -50,7 +58,13 @@ public class CounterController {
 	 */
 	@PostMapping(path = "/itineraries")
 	public ResponseEntity<Itinerary> createItinerary(@Valid @RequestBody Itinerary itinerary){
-		return null;
+		try {
+			counterService.createItinerary(itinerary);
+			ResponseEntity<Itinerary> response = new ResponseEntity<Itinerary>(HttpStatus.CREATED);
+			return response;
+		} catch(IllegalArgumentException e) {
+			throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, e.getMessage(), e);
+		}
 	}
 	
 	/*
@@ -60,7 +74,13 @@ public class CounterController {
 	 */
 	@GetMapping(path = "/itineraries/{itinerary_id}")
 	public ResponseEntity<Itinerary> readItineraryById(@Valid @PathVariable("itinerary_id") Long id) throws NotFoundException {
-		return null;
+		try {
+			Itinerary searchItinerary = counterService.readItineraryById(id);
+			ResponseEntity<Itinerary> response = new ResponseEntity<Itinerary>(searchItinerary, HttpStatus.ACCEPTED);
+			return response;
+		} catch(IllegalArgumentException e) {
+			throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, e.getMessage(), e);
+		}
 	}
 	
 	/*
@@ -70,7 +90,12 @@ public class CounterController {
 	 */
 	@DeleteMapping(path = "/itineraries/{itinerary_id}")
 	public ResponseEntity<Itinerary> deleteItineraryById(@Valid @PathVariable("itinerary_id") Long id) throws NotFoundException {
-		return null;
+		try {
+			counterService.cancelItinerary(id);
+			return  new ResponseEntity<Itinerary>(HttpStatus.NO_CONTENT);
+		} catch(IllegalArgumentException e) {
+			throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, e.getMessage(), e);
+		}
 	}
 	
 	/*
@@ -82,7 +107,12 @@ public class CounterController {
 	 */
 	@GetMapping(path = "/itineraries/travelers/{traveler_id}")
 	public ResponseEntity<List<Itinerary>> readItinerariesByTraveler(@Valid @PathVariable("traveler_id") Long id) throws NotFoundException {
-		return null;
+		try {
+			List<Itinerary> searchItinerary = counterService.readItineraryByTravelerId(id);
+			return new ResponseEntity<List<Itinerary>>(searchItinerary, new HttpHeaders(), HttpStatus.OK);
+		} catch(NotFoundException e) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+		}
 	}
 	
 	/*
@@ -94,7 +124,13 @@ public class CounterController {
 	 */
 	@GetMapping(path = "/itineraries/tickets/{ticket_id}")
 	public ResponseEntity<Ticket> readTicketsById(@Valid @PathVariable("ticket_id") Long id) throws NotFoundException {
-		return null;
+		try {
+			Ticket searchTicket = counterService.readTickets(id);
+			ResponseEntity<Ticket> response = new ResponseEntity<Ticket>(searchTicket, HttpStatus.ACCEPTED);
+			return response;
+		} catch(IllegalArgumentException e) {
+			throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, e.getMessage(), e);
+		}
 	}
 	
 	/*
@@ -103,7 +139,12 @@ public class CounterController {
 	 */
 	@GetMapping(path = "/travelers")
 	public ResponseEntity<List<Traveler>> readTravelers() throws NotFoundException {
-		return null;
+		try{
+			List<Traveler> searchTraveler = counterService.readTravelers();
+			return new ResponseEntity<List<Traveler>>(searchTraveler, new HttpHeaders(), HttpStatus.OK);
+		} catch(NotFoundException e) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+		}
 	}
 	
 	/*
@@ -114,8 +155,14 @@ public class CounterController {
 	 * Description: Create a traveler
 	 */
 	@PostMapping(path = "/travelers")
-	public ResponseEntity<List<Traveler>> createTravelers(@Valid @RequestBody Traveler traveler) throws NotFoundException {
-		return null;
+	public ResponseEntity<Traveler> createTraveler(@Valid @RequestBody Traveler traveler) throws NotFoundException {
+		try {
+			counterService.createTraveler(traveler);
+			ResponseEntity<Traveler> response = new ResponseEntity<Traveler>(HttpStatus.CREATED);
+			return response;
+		} catch(IllegalArgumentException e) {
+			throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, e.getMessage(), e);
+		}
 	}
 	
 	/*

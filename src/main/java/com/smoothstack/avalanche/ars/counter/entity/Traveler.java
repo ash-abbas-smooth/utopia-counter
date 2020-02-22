@@ -12,6 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "traveler")
 public class Traveler {
@@ -51,7 +53,7 @@ public class Traveler {
 		private String city;
 		
 		@Column(name = "postal_code")
-		private String postal_cude;
+		private String postal_code;
 
 		/*
 		 * ENTITY RELATIONSHIPS
@@ -59,6 +61,7 @@ public class Traveler {
 		@OneToMany(mappedBy = "traveler",
 				cascade = CascadeType.ALL,
 				orphanRemoval = true)
+		@JsonIgnore
 		private List<Itinerary> itineraries;
 		
 		/*
@@ -77,10 +80,10 @@ public class Traveler {
 		 * @param country
 		 * @param state
 		 * @param city
-		 * @param postal_cude
+		 * @param postal_code
 		 */
 		public Traveler(Long id, String first_name, String last_name, Date dob, String phone, String email,
-				String street, String country, String state, String city, String postal_cude) {
+				String street, String country, String state, String city, String postal_code) {
 			this.id = id;
 			this.first_name = first_name;
 			this.last_name = last_name;
@@ -91,7 +94,7 @@ public class Traveler {
 			this.country = country;
 			this.state = state;
 			this.city = city;
-			this.postal_cude = postal_cude;
+			this.postal_code = postal_code;
 		}
 
 		/*
@@ -168,10 +171,17 @@ public class Traveler {
 		}
 
 		/**
-		 * @return the postal_cude
+		 * @return the postal_code
 		 */
-		public String getPostal_cude() {
-			return postal_cude;
+		public String getPostal_code() {
+			return postal_code;
+		}
+
+		/**
+		 * @return the itineraries
+		 */
+		public List<Itinerary> getItineraries() {
+			return itineraries;
 		}
 
 		/*
@@ -248,10 +258,16 @@ public class Traveler {
 		}
 
 		/**
-		 * @param postal_cude the postal_cude to set
+		 * @param postal_code the postal_code to set
 		 */
-		public void setPostal_cude(String postal_cude) {
-			this.postal_cude = postal_cude;
+		public void setPostal_code(String postal_code) {
+			this.postal_code = postal_code;
+		}
+		/**
+		 * @param itineraries the itineraries to set
+		 */
+		public void setItineraries(List<Itinerary> itineraries) {
+			this.itineraries = itineraries;
 		}
 
 		/*
@@ -269,7 +285,7 @@ public class Traveler {
 			result = prime * result + ((id == null) ? 0 : id.hashCode());
 			result = prime * result + ((last_name == null) ? 0 : last_name.hashCode());
 			result = prime * result + ((phone == null) ? 0 : phone.hashCode());
-			result = prime * result + ((postal_cude == null) ? 0 : postal_cude.hashCode());
+			result = prime * result + ((postal_code == null) ? 0 : postal_code.hashCode());
 			result = prime * result + ((state == null) ? 0 : state.hashCode());
 			result = prime * result + ((street == null) ? 0 : street.hashCode());
 			return result;
@@ -324,10 +340,10 @@ public class Traveler {
 					return false;
 			} else if (!phone.equals(other.phone))
 				return false;
-			if (postal_cude == null) {
-				if (other.postal_cude != null)
+			if (postal_code == null) {
+				if (other.postal_code != null)
 					return false;
-			} else if (!postal_cude.equals(other.postal_cude))
+			} else if (!postal_code.equals(other.postal_code))
 				return false;
 			if (state == null) {
 				if (other.state != null)

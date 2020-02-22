@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "airport")
 public class Airport {
@@ -38,7 +40,7 @@ public class Airport {
 	private String city;
 	
 	@Column(name = "postal_code")
-	private String postal_cude;
+	private String postal_code;
 	
 	/*
 	 * ENTITY RELATIONSHIP
@@ -46,11 +48,13 @@ public class Airport {
 	@OneToMany(mappedBy = "dest_airport",
 			cascade = CascadeType.ALL,
 			orphanRemoval = true)
+	@JsonIgnore
 	private List<Flight> destFlights;
 	
 	@OneToMany(mappedBy = "origin_airport",
 			cascade = CascadeType.ALL,
 			orphanRemoval = true)
+	@JsonIgnore
 	private List<Flight> originFlights;
 	
 	/*
@@ -67,14 +71,14 @@ public class Airport {
 	 * @param city
 	 * @param postal_cude
 	 */
-	public Airport(Long id, String name, String street, String country, String state, String city, String postal_cude) {
+	public Airport(Long id, String name, String street, String country, String state, String city, String postal_code) {
 		this.id = id;
 		this.name = name;
 		this.street = street;
 		this.country = country;
 		this.state = state;
 		this.city = city;
-		this.postal_cude = postal_cude;
+		this.postal_code = postal_code;
 	}
 
 	/*
@@ -126,14 +130,41 @@ public class Airport {
 	/**
 	 * @return the postal_cude
 	 */
-	public String getPostal_cude() {
-		return postal_cude;
+	public String getPostal_code() {
+		return postal_code;
+	}
+	
+	/**
+	 * @return the destFlights
+	 */
+	public List<Flight> getDestFlights() {
+		return destFlights;
+	}
+
+	/**
+	 * @return the originFlights
+	 */
+	public List<Flight> getOriginFlights() {
+		return originFlights;
 	}
 
 	/*
 	 * SETTERS
 	 */
-	
+	/**
+	 * @param destFlights the destFlights to set
+	 */
+	public void setDestFlights(List<Flight> destFlights) {
+		this.destFlights = destFlights;
+	}
+
+	/**
+	 * @param originFlights the originFlights to set
+	 */
+	public void setOriginFlights(List<Flight> originFlights) {
+		this.originFlights = originFlights;
+	}
+
 	/**
 	 * @param id the id to set
 	 */
@@ -179,10 +210,11 @@ public class Airport {
 	/**
 	 * @param postal_cude the postal_cude to set
 	 */
-	public void setPostal_cude(String postal_cude) {
-		this.postal_cude = postal_cude;
+	public void setPostal_code(String postal_code) {
+		this.postal_code = postal_code;
 	}
 
+ 
 	
 	/*
 	 * OVERRIDE METHOD OBJECTS
@@ -196,7 +228,7 @@ public class Airport {
 		result = prime * result + ((country == null) ? 0 : country.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((postal_cude == null) ? 0 : postal_cude.hashCode());
+		result = prime * result + ((postal_code == null) ? 0 : postal_code.hashCode());
 		result = prime * result + ((state == null) ? 0 : state.hashCode());
 		result = prime * result + ((street == null) ? 0 : street.hashCode());
 		return result;
@@ -231,10 +263,10 @@ public class Airport {
 				return false;
 		} else if (!name.equals(other.name))
 			return false;
-		if (postal_cude == null) {
-			if (other.postal_cude != null)
+		if (postal_code == null) {
+			if (other.postal_code != null)
 				return false;
-		} else if (!postal_cude.equals(other.postal_cude))
+		} else if (!postal_code.equals(other.postal_code))
 			return false;
 		if (state == null) {
 			if (other.state != null)

@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "travel_agency")
 public class TravelAgency {
@@ -40,11 +42,13 @@ public class TravelAgency {
 	@OneToMany(mappedBy = "agency",
 			cascade = CascadeType.ALL,
 			orphanRemoval = true)
+	@JsonIgnore
 	private List<User> agents;
 	
 	@OneToMany(mappedBy = "agency",
 			cascade = CascadeType.ALL,
 			orphanRemoval = true)
+	@JsonIgnore
 	private List<Itinerary> itineraries;
 	
 	/*
@@ -99,7 +103,6 @@ public class TravelAgency {
 	public double getCommission_rate() {
 		return commission_rate;
 	}
-	
 	/*
 	 * SETTERS
 	 */
@@ -133,7 +136,18 @@ public class TravelAgency {
 	public void setCommission_rate(double commission_rate) {
 		this.commission_rate = commission_rate;
 	}
-	
+	/**
+	 * @param agents the agents to set
+	 */
+	public void setAgents(List<User> agents) {
+		this.agents = agents;
+	}
+	/**
+	 * @param itineraries the itineraries to set
+	 */
+	public void setItineraries(List<Itinerary> itineraries) {
+		this.itineraries = itineraries;
+	}
 	/*
 	 * 	OVERRIDE METHOD OBJECT
 	 */

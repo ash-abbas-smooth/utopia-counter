@@ -101,9 +101,34 @@ public class Flight {
 		return departure_date;
 	}
 	
+	/**
+	 * @return the dest_airport
+	 */
+	public Airport getDest_airport() {
+		return dest_airport;
+	}
+	/**
+	 * @return the origin_airport
+	 */
+	public Airport getOrigin_airport() {
+		return origin_airport;
+	}
 	/*
 	 * SETTERS
 	 */	
+	/**
+	 * @param dest_airport the dest_airport to set
+	 */
+	public void setDest_airport(Airport dest_airport) {
+		this.dest_airport = dest_airport;
+	}
+	/**
+	 * @param origin_airport the origin_airport to set
+	 */
+	public void setOrigin_airport(Airport origin_airport) {
+		this.origin_airport = origin_airport;
+	}
+	
 	/**
 	 * @param id the id to set
 	 */
