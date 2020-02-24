@@ -99,9 +99,22 @@ public class Ticket {
 		return boarding_pass;
 	}
 
+	/**
+	 * @return the itinerary
+	 */
+	public Itinerary getItinerary() {
+		return itinerary;
+	}
 	/*
 	 * SETTERS
 	 */
+	/**
+	 * @param itinerary the itinerary to set
+	 */
+	public void setItinerary(Itinerary itinerary) {
+		this.itinerary = itinerary;
+	}
+
 	/**
 	 * @param id the id to set
 	 */
@@ -133,6 +146,7 @@ public class Ticket {
 	public void setBoarding_pass(BoardingPass boarding_pass) {
 		this.boarding_pass = boarding_pass;
 	}
+	
 	/*
 	 * OVERRIDE OBJECT METHOD
 	 */

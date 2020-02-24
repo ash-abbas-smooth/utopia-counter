@@ -1,6 +1,6 @@
 package com.smoothstack.avalanche.ars.counter.entity;
 
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -32,7 +32,7 @@ public class Itinerary {
 	private double price_total;
 	
 	@Column(name = "date_created")
-	private Date date_created;
+	private LocalDate date_created;
 
 	/*
 	 * ENTITY RELATIONSHIPS
@@ -59,7 +59,18 @@ public class Itinerary {
 	 * CONSTRUCTOR
 	 */
 	public Itinerary() {}
-
+	
+	public Itinerary(LocalDate date_created, 
+			TravelAgency agency, 
+			User user, 
+			Traveler traveler,
+			List<Ticket> tickets) {
+		this.date_created = date_created;
+		this.agency = agency;
+		this.user = user;
+		this.traveler = traveler;
+		this.tickets = tickets;
+	}
 	/**
 	 * @param id
 	 * @param price_total
@@ -69,7 +80,7 @@ public class Itinerary {
 	 * @param traveler
 	 * @param tickets
 	 */
-	public Itinerary(Long id, double price_total, Date date_created, TravelAgency agency, User user, Traveler traveler,
+	public Itinerary(Long id, double price_total, LocalDate date_created, TravelAgency agency, User user, Traveler traveler,
 			List<Ticket> tickets) {
 		super();
 		this.id = id;
@@ -98,7 +109,7 @@ public class Itinerary {
 	/**
 	 * @return the date_created
 	 */
-	public Date getDate_created() {
+	public LocalDate getDate_created() {
 		return date_created;
 	}
 	
@@ -144,7 +155,7 @@ public class Itinerary {
 	/**
 	 * @param date_created the date_created to set
 	 */
-	public void setDate_created(Date date_created) {
+	public void setDate_created(LocalDate date_created) {
 		this.date_created = date_created;
 	}
 	/**
