@@ -207,35 +207,35 @@ insert into `itinerary`(id, traveler_id, user_id, agency_id, price_total) values
 insert into `itinerary`(id, traveler_id, user_id, agency_id, price_total) values (30, 24, 30, null, 474);
 
 -- INSERT `ticket`--
-insert into `ticket`(id, flight_number, itinerary_id, status, seat_number) values (1, 6, 1, 'CANCELED', 'G0');
+insert into `ticket`(id, flight_number, itinerary_id, status, seat_number) values (1, 6, 1, 'CANCELLED', 'G0');
 insert into `ticket`(id, flight_number, itinerary_id, status, seat_number) values (2, 30, 2, 'ACTIVE', 'W9');
-insert into `ticket`(id, flight_number, itinerary_id, status, seat_number) values (3, 6, 3, 'CANCELED', 'G1');
+insert into `ticket`(id, flight_number, itinerary_id, status, seat_number) values (3, 6, 3, 'CANCELLED', 'G1');
 insert into `ticket`(id, flight_number, itinerary_id, status, seat_number) values (4, 28, 4, 'COMPLETE', 'B4');
-insert into `ticket`(id, flight_number, itinerary_id, status, seat_number) values (5, 11, 5, 'CANCELED', 'M7');
-insert into `ticket`(id, flight_number, itinerary_id, status, seat_number) values (6, 8, 6, 'CANCELED', 'G3');
-insert into `ticket`(id, flight_number, itinerary_id, status, seat_number) values (7, 10, 7, 'CANCELED', 'K9');
+insert into `ticket`(id, flight_number, itinerary_id, status, seat_number) values (5, 11, 5, 'CANCELLED', 'M7');
+insert into `ticket`(id, flight_number, itinerary_id, status, seat_number) values (6, 8, 6, 'CANCELLED', 'G3');
+insert into `ticket`(id, flight_number, itinerary_id, status, seat_number) values (7, 10, 7, 'CANCELLED', 'K9');
 insert into `ticket`(id, flight_number, itinerary_id, status, seat_number) values (8, 10, 8, 'ACTIVE', 'F1');
-insert into `ticket`(id, flight_number, itinerary_id, status, seat_number) values (9, 10, 9, 'CANCELED', 'W3');
+insert into `ticket`(id, flight_number, itinerary_id, status, seat_number) values (9, 10, 9, 'CANCELLED', 'W3');
 insert into `ticket`(id, flight_number, itinerary_id, status, seat_number) values (10, 19, 10, 'ACTIVE', 'Y7');
 insert into `ticket`(id, flight_number, itinerary_id, status, seat_number) values (11, 24, 11, 'COMPLETE', 'W0');
-insert into `ticket`(id, flight_number, itinerary_id, status, seat_number) values (12, 30, 12, 'CANCELED', 'U8');
-insert into `ticket`(id, flight_number, itinerary_id, status, seat_number) values (13, 4, 13, 'CANCELED', 'O7');
-insert into `ticket`(id, flight_number, itinerary_id, status, seat_number) values (14, 22, 14, 'CANCELED', 'W3');
+insert into `ticket`(id, flight_number, itinerary_id, status, seat_number) values (12, 30, 12, 'CANCELLED', 'U8');
+insert into `ticket`(id, flight_number, itinerary_id, status, seat_number) values (13, 4, 13, 'CANCELLED', 'O7');
+insert into `ticket`(id, flight_number, itinerary_id, status, seat_number) values (14, 22, 14, 'CANCELLED', 'W3');
 insert into `ticket`(id, flight_number, itinerary_id, status, seat_number) values (15, 3, 15, 'COMPLETE', 'V4');
-insert into `ticket`(id, flight_number, itinerary_id, status, seat_number) values (16, 4, 16, 'CANCELED', 'J7');
+insert into `ticket`(id, flight_number, itinerary_id, status, seat_number) values (16, 4, 16, 'CANCELLED', 'J7');
 insert into `ticket`(id, flight_number, itinerary_id, status, seat_number) values (17, 19, 17, 'COMPLETE', 'V6');
-insert into `ticket`(id, flight_number, itinerary_id, status, seat_number) values (18, 14, 18, 'CANCELED', 'X6');
+insert into `ticket`(id, flight_number, itinerary_id, status, seat_number) values (18, 14, 18, 'CANCELLED', 'X6');
 insert into `ticket`(id, flight_number, itinerary_id, status, seat_number) values (19, 17, 19, 'COMPLETE', 'R9');
 insert into `ticket`(id, flight_number, itinerary_id, status, seat_number) values (20, 16, 20, 'ACTIVE', 'F7');
-insert into `ticket`(id, flight_number, itinerary_id, status, seat_number) values (21, 5, 21, 'CANCELED', 'E8');
-insert into `ticket`(id, flight_number, itinerary_id, status, seat_number) values (22, 7, 22, 'CANCELED', 'I0');
+insert into `ticket`(id, flight_number, itinerary_id, status, seat_number) values (21, 5, 21, 'CANCELLED', 'E8');
+insert into `ticket`(id, flight_number, itinerary_id, status, seat_number) values (22, 7, 22, 'CANCELLED', 'I0');
 insert into `ticket`(id, flight_number, itinerary_id, status, seat_number) values (23, 3, 23, 'ACTIVE', 'U7');
-insert into `ticket`(id, flight_number, itinerary_id, status, seat_number) values (24, 13, 24, 'CANCELED', 'B9');
+insert into `ticket`(id, flight_number, itinerary_id, status, seat_number) values (24, 13, 24, 'CANCELLED', 'B9');
 insert into `ticket`(id, flight_number, itinerary_id, status, seat_number) values (25, 15, 25, 'COMPLETE', 'X8');
-insert into `ticket`(id, flight_number, itinerary_id, status, seat_number) values (26, 14, 26, 'CANCELED', 'H8');
+insert into `ticket`(id, flight_number, itinerary_id, status, seat_number) values (26, 14, 26, 'CANCELLED', 'H8');
 insert into `ticket`(id, flight_number, itinerary_id, status, seat_number) values (27, 21, 27, 'COMPLETE', 'E9');
 insert into `ticket`(id, flight_number, itinerary_id, status, seat_number) values (28, 24, 28, 'ACTIVE', 'M8');
-insert into `ticket`(id, flight_number, itinerary_id, status, seat_number) values (29, 22, 29, 'CANCELED', 'E3');
+insert into `ticket`(id, flight_number, itinerary_id, status, seat_number) values (29, 22, 29, 'CANCELLED', 'E3');
 insert into `ticket`(id, flight_number, itinerary_id, status, seat_number) values (30, 7, 30, 'ACTIVE', 'H6');
 
 -- INSERT BOARDING PASS --

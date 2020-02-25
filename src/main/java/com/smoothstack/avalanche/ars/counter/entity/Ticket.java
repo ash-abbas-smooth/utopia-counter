@@ -12,6 +12,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "ticket")
@@ -39,6 +40,7 @@ public class Ticket {
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "itinerary_id")
+	@JsonManagedReference
 	@JsonIgnore
 	private Itinerary itinerary;
 	
@@ -99,9 +101,23 @@ public class Ticket {
 		return boarding_pass;
 	}
 
+	/**
+	 * @return the itinerary
+	 */
+
+	public Itinerary getItinerary() {
+		return itinerary;
+	}
 	/*
 	 * SETTERS
 	 */
+	/**
+	 * @param itinerary the itinerary to set
+	 */
+	public void setItinerary(Itinerary itinerary) {
+		this.itinerary = itinerary;
+	}
+
 	/**
 	 * @param id the id to set
 	 */
@@ -133,6 +149,7 @@ public class Ticket {
 	public void setBoarding_pass(BoardingPass boarding_pass) {
 		this.boarding_pass = boarding_pass;
 	}
+	
 	/*
 	 * OVERRIDE OBJECT METHOD
 	 */

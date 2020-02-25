@@ -1,6 +1,6 @@
 package com.smoothstack.avalanche.ars.counter.entity;
 
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -15,7 +15,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "itinerary")
@@ -32,7 +32,7 @@ public class Itinerary {
 	private double price_total;
 	
 	@Column(name = "date_created")
-	private Date date_created;
+	private LocalDate date_created;
 
 	/*
 	 * ENTITY RELATIONSHIPS
@@ -52,14 +52,23 @@ public class Itinerary {
 	@OneToMany(mappedBy = "itinerary",
 			cascade = CascadeType.ALL,
 			orphanRemoval = true)
-	@JsonIgnore
+	@JsonBackReference
 	private List<Ticket> tickets;
 	
 	/*
 	 * CONSTRUCTOR
 	 */
 	public Itinerary() {}
-
+	
+	public Itinerary(LocalDate date_created, 
+			TravelAgency agency, 
+			User user, 
+			Traveler traveler) {
+		this.date_created = date_created;
+		this.agency = agency;
+		this.user = user;
+		this.traveler = traveler;
+	}
 	/**
 	 * @param id
 	 * @param price_total
@@ -69,7 +78,7 @@ public class Itinerary {
 	 * @param traveler
 	 * @param tickets
 	 */
-	public Itinerary(Long id, double price_total, Date date_created, TravelAgency agency, User user, Traveler traveler,
+	public Itinerary(Long id, double price_total, LocalDate date_created, TravelAgency agency, User user, Traveler traveler,
 			List<Ticket> tickets) {
 		super();
 		this.id = id;
@@ -98,7 +107,7 @@ public class Itinerary {
 	/**
 	 * @return the date_created
 	 */
-	public Date getDate_created() {
+	public LocalDate getDate_created() {
 		return date_created;
 	}
 	
@@ -144,7 +153,7 @@ public class Itinerary {
 	/**
 	 * @param date_created the date_created to set
 	 */
-	public void setDate_created(Date date_created) {
+	public void setDate_created(LocalDate date_created) {
 		this.date_created = date_created;
 	}
 	/**

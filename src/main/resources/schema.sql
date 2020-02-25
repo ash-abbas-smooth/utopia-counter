@@ -111,7 +111,7 @@ CREATE TABLE `itinerary` (
 CREATE TABLE `ticket` (
   `id` BIGINT(11) NOT NULL AUTO_INCREMENT,
   `flight_number` BIGINT(11) NOT NULL,
-  `itinerary_id` BIGINT(11) NOT NULL,
+  `itinerary_id` BIGINT(11) NULL,
   `status` ENUM('COMPLETE', 'ACTIVE', 'CANCELLED') NULL,
   `seat_number` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`id`),
