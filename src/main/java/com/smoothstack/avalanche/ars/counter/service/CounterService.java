@@ -1,6 +1,7 @@
 package com.smoothstack.avalanche.ars.counter.service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -70,9 +71,32 @@ public class CounterService {
 		}
 		return searchItinerary;
 	}
-	
-	public void createItinerary(Itinerary itinerary) throws IllegalArgumentException{
-		itinerary.setDate_created(LocalDate.now());
+	/*
+	 * Function for creating itineraries
+	 */
+	public void createItinerary(ItineraryDTO itineraryDTO) throws IllegalArgumentException{
+		Itinerary itinerary = new Itinerary(LocalDate.now(), itineraryDTO.getAgency(),itineraryDTO.getUser(), itineraryDTO.getTraveler());
+		itineraryDAO.saveAndFlush(itinerary);
+		List<Ticket> tickets = new ArrayList<>();
+		for(Ticket t: itineraryDTO.getTickets()) {
+			Ticket ticket = new Ticket();
+			ticket.setFlight(t.getFlight());
+			ticket.setStatus("ACTIVE");
+			ticket.setItinerary(itinerary);
+			ticket.setSeat_number(t.getSeat_number());
+			tickets.add(ticket);
+			ticketDAO.save(ticket);
+		}
+		itinerary.setTickets(tickets);
+		double price_total = 0;
+		for(Ticket t: itinerary.getTickets()) {
+			price_total += t.getFlight().getPrice();
+		}
+		if(itinerary.getAgency() != null) {
+			price_total += itinerary.getAgency().getCommission_rate() * price_total;
+		}
+		//price_total += price_total * state_tax
+		itinerary.setPrice_total(price_total);
 		itineraryDAO.save(itinerary);
 	}
 

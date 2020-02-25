@@ -56,7 +56,7 @@ public class CounterController {
 	 * Description: Create an itinerary
 	 */
 	@PostMapping(path = "/itineraries")
-	public ResponseEntity<Itinerary> createItinerary(@Valid @RequestBody Itinerary itinerary){
+	public ResponseEntity<Itinerary> createItinerary(@Valid @RequestBody ItineraryDTO itinerary){
 		try {
 			counterService.createItinerary(itinerary);
 			return new ResponseEntity<>(HttpStatus.CREATED);

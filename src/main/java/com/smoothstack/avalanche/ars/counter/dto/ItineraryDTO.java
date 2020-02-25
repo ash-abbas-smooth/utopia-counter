@@ -6,8 +6,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
-import org.apache.el.parser.ParseException;
-
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.smoothstack.avalanche.ars.counter.entity.Ticket;
 import com.smoothstack.avalanche.ars.counter.entity.TravelAgency;
 import com.smoothstack.avalanche.ars.counter.entity.Traveler;
@@ -23,11 +22,29 @@ public class ItineraryDTO {
 	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 	private String date_created;
 	
-	
+	public ItineraryDTO() {}
+	/**
+	 * @param id
+	 * @param user
+	 * @param agency
+	 * @param traveler
+	 * @param tickets
+	 * @param date_created
+	 */
+	public ItineraryDTO(Long id, User user, TravelAgency agency, Traveler traveler, List<Ticket> tickets,
+			String date_created) {
+		super();
+		this.id = id;
+		this.user = user;
+		this.agency = agency;
+		this.traveler = traveler;
+		this.tickets = tickets;
+		this.date_created = date_created;
+	}
 	/*
 	 * GET CURRENT DATE
 	 */
-	
+
 	public Date getSubmissionDateConverted(String timezone) throws java.text.ParseException {
 		dateFormat.setTimeZone(TimeZone.getTimeZone(timezone));
 		return dateFormat.parse(this.date_created);

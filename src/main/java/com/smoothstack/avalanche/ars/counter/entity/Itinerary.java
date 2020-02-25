@@ -15,7 +15,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "itinerary")
@@ -52,7 +52,7 @@ public class Itinerary {
 	@OneToMany(mappedBy = "itinerary",
 			cascade = CascadeType.ALL,
 			orphanRemoval = true)
-	@JsonIgnore
+	@JsonBackReference
 	private List<Ticket> tickets;
 	
 	/*
@@ -63,13 +63,11 @@ public class Itinerary {
 	public Itinerary(LocalDate date_created, 
 			TravelAgency agency, 
 			User user, 
-			Traveler traveler,
-			List<Ticket> tickets) {
+			Traveler traveler) {
 		this.date_created = date_created;
 		this.agency = agency;
 		this.user = user;
 		this.traveler = traveler;
-		this.tickets = tickets;
 	}
 	/**
 	 * @param id

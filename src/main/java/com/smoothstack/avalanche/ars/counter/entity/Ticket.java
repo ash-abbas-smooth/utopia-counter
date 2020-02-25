@@ -12,6 +12,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "ticket")
@@ -39,6 +40,7 @@ public class Ticket {
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "itinerary_id")
+	@JsonManagedReference
 	@JsonIgnore
 	private Itinerary itinerary;
 	
@@ -102,6 +104,7 @@ public class Ticket {
 	/**
 	 * @return the itinerary
 	 */
+
 	public Itinerary getItinerary() {
 		return itinerary;
 	}
