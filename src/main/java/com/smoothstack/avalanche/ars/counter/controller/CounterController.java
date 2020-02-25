@@ -1,6 +1,5 @@
 package com.smoothstack.avalanche.ars.counter.controller;
 
-import java.text.ParseException;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -18,7 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.smoothstack.avalanche.ars.counter.dto.FlightDTO;
 import com.smoothstack.avalanche.ars.counter.dto.ItineraryDTO;
+import com.smoothstack.avalanche.ars.counter.dto.TravelerDTO;
 import com.smoothstack.avalanche.ars.counter.entity.Flight;
 import com.smoothstack.avalanche.ars.counter.entity.Itinerary;
 import com.smoothstack.avalanche.ars.counter.entity.Ticket;
@@ -148,8 +149,9 @@ public class CounterController {
 	 * Description: Create a traveler
 	 */
 	@PostMapping(path = "/travelers")
-	public ResponseEntity<Traveler> createTraveler(@Valid @RequestBody Traveler traveler) throws NotFoundException {
+	public ResponseEntity<Traveler> createTraveler(@Valid @RequestBody TravelerDTO travelerDTO) throws NotFoundException {
 		try {
+			Traveler traveler = convertToEntity(travelerDTO);
 			counterService.createTraveler(traveler);
 			return new ResponseEntity<>(HttpStatus.CREATED);
 		} catch(IllegalArgumentException e) {
@@ -157,29 +159,31 @@ public class CounterController {
 		}
 	}
 	
+	private Traveler convertToEntity(@Valid TravelerDTO travelerDTO) {
+		return new Traveler(travelerDTO.getFirst_name(), travelerDTO.getLast_name(),
+				travelerDTO.getDob(), travelerDTO.getPhone(), travelerDTO.getEmail(),
+				travelerDTO.getStreet(), travelerDTO.getCountry(), travelerDTO.getState(), travelerDTO.getCity(),
+				travelerDTO.getPostal_code());
+	}
 	/*
 	 * Get Endpoint:  /travelers/search
 	 * Description: List all travelers fulfilling the params
 	 */
 	@PostMapping(path = "/travelers/search")
-	public ResponseEntity<List<Traveler>> readTravelersByParams(@Valid @RequestBody Traveler traveler) {
+	public ResponseEntity<List<Traveler>> readTravelersByParams(@Valid @RequestBody TravelerDTO travelerDTO) {
+		Traveler traveler = convertToEntity(travelerDTO);
 		List<Traveler> searchTraveler = counterService.searchTravelersByParam(traveler);
 		return new ResponseEntity<>(searchTraveler, new HttpHeaders(), HttpStatus.OK);
 	}
 	
 	@PostMapping(path = "/flights/search")
-	public ResponseEntity<List<Flight>> readFlightsByParams(@Valid @RequestBody Flight flight) throws NotFoundException {
+	public ResponseEntity<List<Flight>> readFlightsByParams(@Valid @RequestBody FlightDTO flightDTO) throws NotFoundException {
+		Flight flight = convertToEntity(flightDTO);
 		List<Flight> searchFlight = counterService.searchFlightsByParam(flight);
 		return new ResponseEntity<>(searchFlight, new HttpHeaders(), HttpStatus.OK);
 	}
-	
-	
-	/*
-	 * CONVERT TO ENTITY FUNCTIONS
-	 */
-	private Itinerary convertToEntity(ItineraryDTO itineraryDto) throws ParseException{
-		//Itinerary itinerary = modelMapper.map(itineraryDto, Itinerary.class);
-		return null;
+	private Flight convertToEntity(@Valid FlightDTO flightDTO) {
+		return new Flight(flightDTO.getId(),flightDTO.getCapacity(), flightDTO.getPrice(), flightDTO.getArrival_date(), flightDTO.getDeparture_date());
 	}
 }
 

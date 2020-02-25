@@ -97,6 +97,19 @@ public class Traveler {
 			this.postal_code = postal_code;
 		}
 
+		public Traveler(String first_name, String last_name, Date dob, String phone, String email,
+				String street, String country, String state, String city, String postal_code) {
+			this.first_name = first_name;
+			this.last_name = last_name;
+			this.dob = dob;
+			this.phone = phone;
+			this.email = email;
+			this.street = street;
+			this.country = country;
+			this.state = state;
+			this.city = city;
+			this.postal_code = postal_code;
+		}
 		/*
 		 * GETTERS
 		 */

@@ -277,7 +277,7 @@ public class Airport {
 			if (other.street != null)
 				return false;
 		} else if (!street.equals(other.street))
-			return false;
+				return false;
 		return true;
 	}
 	

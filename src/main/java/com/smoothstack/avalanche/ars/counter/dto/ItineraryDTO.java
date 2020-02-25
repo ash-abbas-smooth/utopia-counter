@@ -6,7 +6,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.smoothstack.avalanche.ars.counter.entity.Ticket;
 import com.smoothstack.avalanche.ars.counter.entity.TravelAgency;
 import com.smoothstack.avalanche.ars.counter.entity.Traveler;
@@ -19,7 +18,6 @@ public class ItineraryDTO {
 	private TravelAgency agency;
 	private Traveler traveler;
 	private List<Ticket> tickets;
-	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 	private String date_created;
 	
 	public ItineraryDTO() {}
@@ -46,10 +44,12 @@ public class ItineraryDTO {
 	 */
 
 	public Date getSubmissionDateConverted(String timezone) throws java.text.ParseException {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		dateFormat.setTimeZone(TimeZone.getTimeZone(timezone));
 		return dateFormat.parse(this.date_created);
 	}
 	public void setSubmissionDate(Date date, String timezone) {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		dateFormat.setTimeZone(TimeZone.getTimeZone(timezone));
 		this.date_created = dateFormat.format(date_created);
 	}
