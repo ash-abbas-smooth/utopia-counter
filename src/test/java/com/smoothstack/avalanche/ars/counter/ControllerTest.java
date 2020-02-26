@@ -1,6 +1,5 @@
 package com.smoothstack.avalanche.ars.counter;
 
-import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.sql.Date;
@@ -11,15 +10,18 @@ import java.util.Optional;
 
 import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import com.smoothstack.avalanche.ars.counter.controller.CounterController;
 import com.smoothstack.avalanche.ars.counter.dao.AirportDAO;
@@ -28,7 +30,9 @@ import com.smoothstack.avalanche.ars.counter.dao.ItineraryDAO;
 import com.smoothstack.avalanche.ars.counter.dao.TicketDAO;
 import com.smoothstack.avalanche.ars.counter.dao.TravelerDAO;
 import com.smoothstack.avalanche.ars.counter.dao.UserDAO;
+import com.smoothstack.avalanche.ars.counter.dto.FlightDTO;
 import com.smoothstack.avalanche.ars.counter.dto.ItineraryDTO;
+import com.smoothstack.avalanche.ars.counter.dto.TravelerDTO;
 import com.smoothstack.avalanche.ars.counter.entity.Airport;
 import com.smoothstack.avalanche.ars.counter.entity.Flight;
 import com.smoothstack.avalanche.ars.counter.entity.Itinerary;
@@ -39,7 +43,8 @@ import com.smoothstack.avalanche.ars.counter.service.CounterService;
 
 import javassist.NotFoundException;
 
-@ExtendWith(MockitoExtension.class)
+@RunWith(SpringRunner.class)
+@DataJpaTest
 public class ControllerTest {
 
 	@InjectMocks
@@ -49,10 +54,14 @@ public class ControllerTest {
 	CounterService counterService;
 	
 	@TestConfiguration
-	static class CounterServiceTestContextConfiguration{
+	static class CounterControllerTestContextConfiguration{
 		@Bean
 		public CounterService counterService() {
 			return new CounterService();
+		}
+		@Bean
+		public CounterController counterController() {
+			return new CounterController();
 		}
 	}
 	
@@ -75,7 +84,7 @@ public class ControllerTest {
 	private FlightDAO flightDAO;
 	
 	@BeforeEach
-	public void setUp() {
+	public void setUp() throws NotFoundException {
 		User user = new User(Long.valueOf(1), "email","pw","TRAVELER", "firstname", "lastname", new Date(1,1,1),"111-111-1111","street","country","state","city","postal");
 		Traveler traveler = new Traveler(Long.valueOf(1),"firstname","lastname", new Date(1,1,1),"111-111-1111","email","street","country","state","city","postal_code");
 		Traveler traveler2 = new Traveler(Long.valueOf(2),"firstname2","lastname", new Date(1,1,1),"111-111-1111","email","street","country","state","city","postal_code"); 
@@ -103,66 +112,84 @@ public class ControllerTest {
 		Mockito.when(ticketDAO.findById(Long.valueOf(1))).thenReturn(Optional.of(ticket));
 		Mockito.when(travelerDAO.findAll()).thenReturn(travelers);
 		Mockito.when(flightDAO.findAll()).thenReturn(flights);
+		ResponseEntity<Itinerary> testGetResponseItinerary = new ResponseEntity<>(itinerary, new HttpHeaders(), HttpStatus.OK);
+		ResponseEntity<List<Itinerary>> testItinerary = new ResponseEntity<>(itineraries, new HttpHeaders(), HttpStatus.OK);
+		Mockito.when(counterController.readItineraries()).thenReturn(testItinerary);
+		Mockito.when(counterController.readItinerariesByTraveler(Long.valueOf(1))).thenReturn(testItinerary);
+		Mockito.when(counterController.readItineraryById(Long.valueOf(1))).thenReturn(testGetResponseItinerary);
+		ResponseEntity<Itinerary> testEntityPostItinerary = new ResponseEntity<>(HttpStatus.CREATED);
+		ResponseEntity<Itinerary> testEntityDelete = new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		Mockito.when(counterController.createItinerary(Mockito.any(ItineraryDTO.class))).thenReturn(testEntityPostItinerary);
+		Mockito.when(counterController.deleteItineraryById(Mockito.any(Long.class))).thenReturn(testEntityDelete);
+		ResponseEntity<Ticket> testTicketEntity = new ResponseEntity<>(ticket, new HttpHeaders(), HttpStatus.OK);
+		Mockito.when(counterController.readTicketsById(Mockito.any(Long.class))).thenReturn(testTicketEntity);
+		ResponseEntity<List<Traveler>> testGetTravelerEntity = new ResponseEntity<>(travelers, new HttpHeaders(), HttpStatus.OK);
+		Mockito.when(counterController.readTravelers()).thenReturn(testGetTravelerEntity);
+		ResponseEntity<Traveler> testEntityPostTraveler = new ResponseEntity<>(HttpStatus.CREATED);
+		Mockito.when(counterController.createTraveler(Mockito.any(TravelerDTO.class))).thenReturn(testEntityPostTraveler);
+		Mockito.when(counterController.readTravelersByParams(Mockito.any(TravelerDTO.class))).thenReturn(testGetTravelerEntity);
+		ResponseEntity<List<Flight>> testEntityGetFlights = new ResponseEntity<>(flights, new HttpHeaders(), HttpStatus.OK );
+		Mockito.when(counterController.readFlightsByParams(Mockito.any(FlightDTO.class))).thenReturn(testEntityGetFlights);
 	}
 	
 	@Test
-	public void testReadItineraries() throws NotFoundException {
+	public void testReadItineraries() {
 		ResponseEntity<List<Itinerary>> testItineraries = counterController.readItineraries();
-		assertEquals(testItineraries.getBody().get(0), Long.valueOf(1));
+		assertEquals(testItineraries.getStatusCode(), HttpStatus.OK);
 	}
 	
 	@Test
-	public void testGetItineraryById() throws NotFoundException{
-		Itinerary testItinerary = counterService.readItineraryById(Long.valueOf(1));
-		assertEquals(testItinerary.getId(), Long.valueOf(1));
-		assertFalse(testItinerary.getId().equals(Long.valueOf(2)));
+	public void testGetItineraryById() {
+		ResponseEntity<Itinerary> testItinerary = counterController.readItineraryById(Long.valueOf(1));
+		assertEquals(testItinerary.getStatusCode(), HttpStatus.OK);
 	}
 	
 	@Test
-	public void testGetItineraryByTraveler() throws NotFoundException{
-		List<Itinerary> testItineraries = counterService.readItineraryByTravelerId(Long.valueOf(2));
-		assertEquals(testItineraries.get(0).getId(), Long.valueOf(2));
-		assertEquals(testItineraries.size(), 1);
+	public void testGetItineraryByTraveler() {
+		ResponseEntity<List<Itinerary>> testItineraries = counterController.readItinerariesByTraveler(Long.valueOf(1));
+		assertEquals(testItineraries.getStatusCode(), HttpStatus.OK);
 	}
 	
 	@Test
-	public void testCreateItinerary() throws NotFoundException{
-		ItineraryDTO itineraryDTO = new ItineraryDTO(Long.valueOf(3), new User(), null, new Traveler(), new ArrayList<Ticket>(), "1111-11-11");
-		counterService.createItinerary(itineraryDTO);
-		assertEquals(itineraryDAO.findAll().size(), 1);
+	public void testCreateItinerary() {
+		ItineraryDTO itineraryDTO = new ItineraryDTO();
+		ResponseEntity<Itinerary> testResponseEntity = counterController.createItinerary(itineraryDTO);
+		assertEquals(testResponseEntity.getStatusCode(), HttpStatus.CREATED);
 	}
 	
 	@Test
-	public void testCancelItinerary() throws IllegalArgumentException{
-		counterService.cancelItinerary(Long.valueOf(1));
-		assertEquals(itineraryDAO.findById(Long.valueOf(1)).get().getTickets().get(0).getStatus(), "CANCELLED");
+	public void testCancelItinerary() {
+		ResponseEntity<Itinerary> testResponseEntity = counterController.deleteItineraryById(Long.valueOf(1));
+		assertEquals(testResponseEntity.getStatusCode(), HttpStatus.NO_CONTENT);
 	}
 	
 	@Test
-	public void testReadTickets() throws IllegalArgumentException,NotFoundException{
-		Ticket testTicket = counterService.readTickets(Long.valueOf(1));
-		assertEquals(testTicket.getSeat_number(), "1A");
+	public void testReadTickets() {
+		ResponseEntity<Ticket> testResponseEntity = counterController.readTicketsById(Long.valueOf(1));
+		assertEquals(testResponseEntity.getStatusCode(), HttpStatus.OK);
 	}
 	
 	@Test
-	public void testReadTraveler() throws NotFoundException{
-		List<Traveler> listTraveler = counterService.readTravelers();
-		assertEquals(listTraveler.size(), 2);
+	public void testReadTraveler() {
+		ResponseEntity<List<Traveler>> testResponseEntity = counterController.readTravelers();
+		assertEquals(testResponseEntity.getStatusCode(), HttpStatus.OK);
+	}
+	
+	@Test
+	public void testCreateTraveler() {
+		ResponseEntity<Traveler> testResponseEntity = counterController.createTraveler(new TravelerDTO());
+		assertEquals(testResponseEntity.getStatusCode(),HttpStatus.CREATED);
 	}
 	
 	@Test
 	public void testSearchTravelerByParam(){
-		Traveler traveler = new Traveler();
-		traveler.setFirst_name("firstname2");
-		List<Traveler> travelers = counterService.searchTravelersByParam(traveler);
-		assertEquals(travelers.size(), 1);
+		ResponseEntity<List<Traveler>> testResponseEntity = counterController.readTravelersByParams(new TravelerDTO());
+		assertEquals(testResponseEntity.getStatusCode(), HttpStatus.OK);
 	}
 	
 	@Test
 	public void testSearchFlightByParam() {
-		Flight flight = new Flight();
-		flight.setPrice(100);
-		List<Flight> flights = counterService.searchFlightsByParam(flight);
-		assertEquals(flights.size(), 1);
+		ResponseEntity<List<Flight>> testResponseEntity = counterController.readFlightsByParams(new FlightDTO());
+		assertEquals(testResponseEntity.getStatusCode(), HttpStatus.OK);
 	}
 }

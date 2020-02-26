@@ -39,7 +39,7 @@ public class CounterController {
 	 * Description: List all itineraries in the db
 	 */
 	@GetMapping(path = "/itineraries")
-	public ResponseEntity<List<Itinerary>> readItineraries() throws NotFoundException {
+	public ResponseEntity<List<Itinerary>> readItineraries(){
 		try{
 			List<Itinerary> searchItinerary = counterService.readItineraries();
 			return new ResponseEntity<>(searchItinerary, new HttpHeaders(), HttpStatus.OK);
@@ -71,12 +71,12 @@ public class CounterController {
 	 * 
 	 */
 	@GetMapping(path = "/itineraries/{itinerary_id}")
-	public ResponseEntity<Itinerary> readItineraryById(@Valid @PathVariable("itinerary_id") Long id) throws NotFoundException {
+	public ResponseEntity<Itinerary> readItineraryById(@Valid @PathVariable("itinerary_id") Long id) {
 		try {
 			Itinerary searchItinerary = counterService.readItineraryById(id);
-			return new ResponseEntity<>(searchItinerary, HttpStatus.ACCEPTED);
+			return new ResponseEntity<>(searchItinerary, HttpStatus.OK);
 		
-		} catch(IllegalArgumentException e) {
+		} catch(NotFoundException e) {
 			throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, e.getMessage(), e);
 		}
 	}
@@ -86,7 +86,7 @@ public class CounterController {
 	 * Description: only set all the tickets to cancelled and handle refund api
 	 */
 	@DeleteMapping(path = "/itineraries/{itinerary_id}")
-	public ResponseEntity<Itinerary> deleteItineraryById(@Valid @PathVariable("itinerary_id") Long id) throws NotFoundException {
+	public ResponseEntity<Itinerary> deleteItineraryById(@Valid @PathVariable("itinerary_id") Long id) {
 		try {
 			counterService.cancelItinerary(id);
 			return  new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -102,7 +102,7 @@ public class CounterController {
 	 * Description: get itineraries of the traveler
 	 */
 	@GetMapping(path = "/itineraries/travelers/{traveler_id}")
-	public ResponseEntity<List<Itinerary>> readItinerariesByTraveler(@Valid @PathVariable("traveler_id") Long id) throws NotFoundException {
+	public ResponseEntity<List<Itinerary>> readItinerariesByTraveler(@Valid @PathVariable("traveler_id") Long id) {
 		try {
 			List<Itinerary> searchItinerary = counterService.readItineraryByTravelerId(id);
 			return new ResponseEntity<>(searchItinerary, new HttpHeaders(), HttpStatus.OK);
@@ -118,10 +118,10 @@ public class CounterController {
 	 * Description: get ticket by the id
 	 */
 	@GetMapping(path = "/itineraries/tickets/{ticket_id}")
-	public ResponseEntity<Ticket> readTicketsById(@Valid @PathVariable("ticket_id") Long id) throws NotFoundException {
+	public ResponseEntity<Ticket> readTicketsById(@Valid @PathVariable("ticket_id") Long id) {
 		try {
 			Ticket searchTicket = counterService.readTickets(id);
-			return new ResponseEntity<>(searchTicket, HttpStatus.ACCEPTED);
+			return new ResponseEntity<>(searchTicket, HttpStatus.OK);
 		} catch(NotFoundException e) {
 			throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, e.getMessage(), e);
 		}
@@ -132,7 +132,7 @@ public class CounterController {
 	 * Description: List all travelers in the db
 	 */
 	@GetMapping(path = "/travelers")
-	public ResponseEntity<List<Traveler>> readTravelers() throws NotFoundException {
+	public ResponseEntity<List<Traveler>> readTravelers(){
 		try{
 			List<Traveler> searchTraveler = counterService.readTravelers();
 			return new ResponseEntity<>(searchTraveler, new HttpHeaders(), HttpStatus.OK);
@@ -149,7 +149,7 @@ public class CounterController {
 	 * Description: Create a traveler
 	 */
 	@PostMapping(path = "/travelers")
-	public ResponseEntity<Traveler> createTraveler(@Valid @RequestBody TravelerDTO travelerDTO) throws NotFoundException {
+	public ResponseEntity<Traveler> createTraveler(@Valid @RequestBody TravelerDTO travelerDTO) {
 		try {
 			Traveler traveler = convertToEntity(travelerDTO);
 			counterService.createTraveler(traveler);
@@ -177,7 +177,7 @@ public class CounterController {
 	}
 	
 	@PostMapping(path = "/flights/search")
-	public ResponseEntity<List<Flight>> readFlightsByParams(@Valid @RequestBody FlightDTO flightDTO) throws NotFoundException {
+	public ResponseEntity<List<Flight>> readFlightsByParams(@Valid @RequestBody FlightDTO flightDTO) {
 		Flight flight = convertToEntity(flightDTO);
 		List<Flight> searchFlight = counterService.searchFlightsByParam(flight);
 		return new ResponseEntity<>(searchFlight, new HttpHeaders(), HttpStatus.OK);
