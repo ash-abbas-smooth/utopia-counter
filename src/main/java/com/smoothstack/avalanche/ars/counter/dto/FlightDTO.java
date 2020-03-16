@@ -29,12 +29,14 @@ public class FlightDTO {
 	 * @param arrival_date
 	 * @param departure_date
 	 */
-	public FlightDTO(Long id, int capacity, double price, Date arrival_date, Date departure_date) {
+	public FlightDTO(Long id, int capacity, double price, Date arrival_date, Date departure_date, Airport dest_airport, Airport origin_airport) {
 		this.id = id;
 		this.capacity = capacity;
 		this.price = price;
 		this.arrival_date = arrival_date;
 		this.departure_date = departure_date;
+		this.dest_airport = dest_airport;
+		this.origin_airport = origin_airport;
 	}
 	
 	/*

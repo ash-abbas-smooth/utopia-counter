@@ -4,6 +4,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.sql.Date;
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -97,6 +98,7 @@ public class ServiceTest {
 		Mockito.when(itineraryDAO.findItineraryByTravelerId(Long.valueOf(2))).thenReturn(itineraries2);
 		Mockito.when(itineraryDAO.save(itinerary)).thenReturn(itinerary);
 		Mockito.when(ticketDAO.findById(Long.valueOf(1))).thenReturn(Optional.of(ticket));
+		Mockito.when(ticketDAO.findTicketsByItinerary(Long.valueOf(1))).thenReturn(tickets);
 		Mockito.when(travelerDAO.findAll()).thenReturn(travelers);
 		Mockito.when(flightDAO.findAll()).thenReturn(flights);
 	}
@@ -122,18 +124,11 @@ public class ServiceTest {
 		assertEquals(testItineraries.size(), 1);
 	}
 	
-	@Test
-	public void testCreateItinerary() throws NotFoundException{
-		ItineraryDTO itineraryDTO = new ItineraryDTO(Long.valueOf(3), new User(), null, new Traveler(), new ArrayList<Ticket>(), "1111-11-11");
-		counterService.createItinerary(itineraryDTO);
-		List<Itinerary> listItinerary = itineraryDAO.findAll();
-		assertEquals(itineraryDAO.findAll().size(), 1);
-	}
 	
 	@Test
 	public void testCancelItinerary() throws IllegalArgumentException{
 		counterService.cancelItinerary(Long.valueOf(1));
-		assertEquals(itineraryDAO.findById(Long.valueOf(1)).get().getTickets().get(0).getStatus(), "CANCELLED");
+		assertEquals(ticketDAO.findTicketsByItinerary(Long.valueOf(1)).get(0).getStatus(), "CANCELED");
 	}
 	
 	@Test

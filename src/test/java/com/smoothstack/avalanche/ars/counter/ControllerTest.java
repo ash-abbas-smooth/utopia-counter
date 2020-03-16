@@ -3,6 +3,7 @@ package com.smoothstack.avalanche.ars.counter;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.sql.Date;
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -84,7 +85,7 @@ public class ControllerTest {
 	private FlightDAO flightDAO;
 	
 	@BeforeEach
-	public void setUp() throws NotFoundException {
+	public void setUp() throws NotFoundException, ParseException {
 		User user = new User(Long.valueOf(1), "email","pw","TRAVELER", "firstname", "lastname", new Date(1,1,1),"111-111-1111","street","country","state","city","postal");
 		Traveler traveler = new Traveler(Long.valueOf(1),"firstname","lastname", new Date(1,1,1),"111-111-1111","email","street","country","state","city","postal_code");
 		Traveler traveler2 = new Traveler(Long.valueOf(2),"firstname2","lastname", new Date(1,1,1),"111-111-1111","email","street","country","state","city","postal_code"); 
@@ -117,19 +118,19 @@ public class ControllerTest {
 		Mockito.when(counterController.readItineraries()).thenReturn(testItinerary);
 		Mockito.when(counterController.readItinerariesByTraveler(Long.valueOf(1))).thenReturn(testItinerary);
 		Mockito.when(counterController.readItineraryById(Long.valueOf(1))).thenReturn(testGetResponseItinerary);
-		ResponseEntity<Itinerary> testEntityPostItinerary = new ResponseEntity<>(HttpStatus.CREATED);
+		ResponseEntity<Long> testEntityPost = new ResponseEntity<>(HttpStatus.CREATED);
 		ResponseEntity<Itinerary> testEntityDelete = new ResponseEntity<>(HttpStatus.NO_CONTENT);
-		Mockito.when(counterController.createItinerary(Mockito.any(ItineraryDTO.class))).thenReturn(testEntityPostItinerary);
+		Mockito.when(counterController.createItinerary(Mockito.any(ItineraryDTO.class))).thenReturn(testEntityPost);
 		Mockito.when(counterController.deleteItineraryById(Mockito.any(Long.class))).thenReturn(testEntityDelete);
 		ResponseEntity<Ticket> testTicketEntity = new ResponseEntity<>(ticket, new HttpHeaders(), HttpStatus.OK);
 		Mockito.when(counterController.readTicketsById(Mockito.any(Long.class))).thenReturn(testTicketEntity);
 		ResponseEntity<List<Traveler>> testGetTravelerEntity = new ResponseEntity<>(travelers, new HttpHeaders(), HttpStatus.OK);
 		Mockito.when(counterController.readTravelers()).thenReturn(testGetTravelerEntity);
 		ResponseEntity<Traveler> testEntityPostTraveler = new ResponseEntity<>(HttpStatus.CREATED);
-		Mockito.when(counterController.createTraveler(Mockito.any(TravelerDTO.class))).thenReturn(testEntityPostTraveler);
+		Mockito.when(counterController.createTraveler(Mockito.any(TravelerDTO.class))).thenReturn(testEntityPost);
 		Mockito.when(counterController.readTravelersByParams(Mockito.any(TravelerDTO.class))).thenReturn(testGetTravelerEntity);
 		ResponseEntity<List<Flight>> testEntityGetFlights = new ResponseEntity<>(flights, new HttpHeaders(), HttpStatus.OK );
-		Mockito.when(counterController.readFlightsByParams(Mockito.any(FlightDTO.class))).thenReturn(testEntityGetFlights);
+		Mockito.when(counterController.readFlightsByParams(Mockito.any(Flight.class))).thenReturn(testEntityGetFlights);
 	}
 	
 	@Test
@@ -151,9 +152,9 @@ public class ControllerTest {
 	}
 	
 	@Test
-	public void testCreateItinerary() {
+	public void testCreateItinerary() throws ParseException {
 		ItineraryDTO itineraryDTO = new ItineraryDTO();
-		ResponseEntity<Itinerary> testResponseEntity = counterController.createItinerary(itineraryDTO);
+		ResponseEntity<Long> testResponseEntity = counterController.createItinerary(itineraryDTO);
 		assertEquals(testResponseEntity.getStatusCode(), HttpStatus.CREATED);
 	}
 	
@@ -177,7 +178,7 @@ public class ControllerTest {
 	
 	@Test
 	public void testCreateTraveler() {
-		ResponseEntity<Traveler> testResponseEntity = counterController.createTraveler(new TravelerDTO());
+		ResponseEntity<Long> testResponseEntity = counterController.createTraveler(new TravelerDTO());
 		assertEquals(testResponseEntity.getStatusCode(),HttpStatus.CREATED);
 	}
 	
@@ -189,7 +190,7 @@ public class ControllerTest {
 	
 	@Test
 	public void testSearchFlightByParam() {
-		ResponseEntity<List<Flight>> testResponseEntity = counterController.readFlightsByParams(new FlightDTO());
+		ResponseEntity<List<Flight>> testResponseEntity = counterController.readFlightsByParams(new Flight());
 		assertEquals(testResponseEntity.getStatusCode(), HttpStatus.OK);
 	}
 }
