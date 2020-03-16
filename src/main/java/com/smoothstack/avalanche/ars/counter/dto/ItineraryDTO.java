@@ -2,6 +2,9 @@ package com.smoothstack.avalanche.ars.counter.dto;
 
 
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
@@ -18,6 +21,7 @@ public class ItineraryDTO {
 	private TravelAgency agency;
 	private Traveler traveler;
 	private List<Ticket> tickets;
+	private Double price_total;
 	private String date_created;
 	
 	public ItineraryDTO() {}
@@ -30,23 +34,32 @@ public class ItineraryDTO {
 	 * @param date_created
 	 */
 	public ItineraryDTO(Long id, User user, TravelAgency agency, Traveler traveler, List<Ticket> tickets,
-			String date_created) {
+			Double price_total, String date_created) {
 		super();
 		this.id = id;
 		this.user = user;
 		this.agency = agency;
 		this.traveler = traveler;
 		this.tickets = tickets;
+		this.price_total = price_total;
 		this.date_created = date_created;
 	}
 	/*
 	 * GET CURRENT DATE
 	 */
 
-	public Date getSubmissionDateConverted(String timezone) throws java.text.ParseException {
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+	public LocalDate getSubmissionDateConverted(String timezone) throws java.text.ParseException {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		dateFormat.setTimeZone(TimeZone.getTimeZone(timezone));
-		return dateFormat.parse(this.date_created);
+		Date date = dateFormat.parse(this.date_created);
+		
+		//Getting the default zone id
+		ZoneId defaultZoneId = ZoneId.systemDefault();
+			
+		//Converting the date to Instant
+		Instant instant = date.toInstant();
+		return instant.atZone(defaultZoneId).toLocalDate();
+		
 	}
 	public void setSubmissionDate(Date date, String timezone) {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
@@ -85,6 +98,9 @@ public class ItineraryDTO {
 	public List<Ticket> getTickets() {
 		return tickets;
 	}
+	public Double getPrice_total() {
+		return price_total;
+	}
 	//SETTERS
 	/**
 	 * @param id the id to set
@@ -117,5 +133,7 @@ public class ItineraryDTO {
 		this.tickets = tickets;
 	}
 	
-	
+	public void setPrice_total(double price_total) {
+		this.price_total = price_total;
+	}
 }

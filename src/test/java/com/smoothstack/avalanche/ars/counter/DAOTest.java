@@ -31,9 +31,12 @@ public class DAOTest {
 	
 	@Test
 	public void testFindItineraryByTravelerId() {
+	
 		List<Itinerary> itineraryByTravelerTrue = itineraryDAO.findItineraryByTravelerId(Long.valueOf(18));
 		List<Itinerary> itineraryByTravelerFalse = itineraryDAO.findItineraryByTravelerId(Long.valueOf(2));
 		assertTrue(itineraryByTravelerTrue.size()==2);
 		assertFalse(itineraryByTravelerFalse.size()==5);
+		
 	}
+	
 }

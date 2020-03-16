@@ -1,5 +1,6 @@
 package com.smoothstack.avalanche.ars.counter.service;
 
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +40,7 @@ public class CounterService {
 	@Autowired
 	private FlightDAO flightDAO;
 	
+	
 	/*
 	 * Function for returning all the itineraries
 	 * Used for the endpoint:
@@ -74,11 +76,12 @@ public class CounterService {
 	/*
 	 * Function for creating itineraries
 	 */
-	public void createItinerary(ItineraryDTO itineraryDTO) throws IllegalArgumentException{
-		Itinerary itinerary = new Itinerary(LocalDate.now(), itineraryDTO.getAgency(),itineraryDTO.getUser(), itineraryDTO.getTraveler());
+	public Long createItinerary(ItineraryDTO itineraryDTO) throws IllegalArgumentException, ParseException{
+		Itinerary itinerary = new Itinerary(Long.MAX_VALUE, (double) itineraryDTO.getPrice_total(), itineraryDTO.getSubmissionDateConverted("EST")
+				, itineraryDTO.getAgency(), itineraryDTO.getUser(), itineraryDTO.getTraveler(), itineraryDTO.getTickets());
 		itineraryDAO.saveAndFlush(itinerary);
 		List<Ticket> tickets = new ArrayList<>();
-		for(Ticket t: itineraryDTO.getTickets()) {
+		for(Ticket t: itinerary.getTickets()) {
 			Ticket ticket = new Ticket();
 			ticket.setFlight(t.getFlight());
 			ticket.setStatus("ACTIVE");
@@ -97,7 +100,8 @@ public class CounterService {
 		}
 		//price_total += price_total * state_tax
 		itinerary.setPrice_total(price_total);
-		itineraryDAO.save(itinerary);
+		Itinerary savedItinerary = itineraryDAO.save(itinerary);
+		return savedItinerary.getId();
 	}
 
 	
@@ -107,14 +111,11 @@ public class CounterService {
 	public void cancelItinerary(Long id) throws IllegalArgumentException{
 		if(id == 0)
 			throw new IllegalArgumentException("Inproper Input passed: itinerary_id");
-		Optional<Itinerary> searchItinerary = itineraryDAO.findById(id);
-		if(searchItinerary.isPresent()) {
-			List<Ticket> tickets = searchItinerary.get().getTickets();
-			tickets.forEach(ticket -> {
-				ticket.setStatus("CANCELLED");
-				ticketDAO.save(ticket);
-				});
-		}
+		List<Ticket> searchTickets = ticketDAO.findTicketsByItinerary(id);
+		searchTickets.forEach( ticket -> {
+			ticket.setStatus("CANCELED");
+			ticketDAO.save(ticket);
+		});
 	}
 	/*
 	 * Function for getting a specific ticket
@@ -127,6 +128,16 @@ public class CounterService {
 			return searchTicket.get();
 		}
 		throw new NotFoundException("Ticket with id does not exist. Id:" + id);
+	}
+	public List<Ticket> readTicketsByItineraryId(Long id) throws IllegalArgumentException, NotFoundException{
+		if(id == 0)
+			throw new IllegalArgumentException("Inproper Input Passed: id");
+		List<Ticket> searchTickets = ticketDAO.findTicketsByItinerary(id);
+		if(searchTickets.isEmpty()) {
+			throw new NotFoundException("Error: readTicketsByItinerary: No tickets found!");
+		}
+		return searchTickets;
+		
 	}
 	/*
 	 * Function for getting list of travelers
@@ -141,7 +152,7 @@ public class CounterService {
 	/*
 	 * Function for creating traveler
 	 */
-	public void createTraveler(Traveler traveler) throws IllegalArgumentException{
+	public Long createTraveler(Traveler traveler) throws IllegalArgumentException{
 		if(traveler == null || traveler.getId() == 0) {
 			throw new IllegalArgumentException("Inproper Input passed: traveler");
 		}
@@ -149,7 +160,8 @@ public class CounterService {
 		if(searchTraveler.isPresent()) {
 			throw new IllegalArgumentException("Traveler already exist with Id:" + traveler.getId());
 		}
-		travelerDAO.save(traveler);
+		Traveler savedTraveler = travelerDAO.save(traveler);
+		return savedTraveler.getId();
 	}
 	
 	/*
@@ -186,6 +198,14 @@ public class CounterService {
 		}
 		return searchTraveler;
 	}
+	public List<Flight> readFlights() throws NotFoundException{
+		List<Flight> listFlight = flightDAO.findAll();
+		if(listFlight.isEmpty()) {
+			throw new NotFoundException("No flights found!");
+		}
+		return listFlight;
+		
+	}
 	public List<Flight> searchFlightsByParam(Flight flight){
 		List<Flight> searchFlight = flightDAO.findAll();
 		if(flight.getArrival_date() != null){
@@ -198,10 +218,10 @@ public class CounterService {
 			searchFlight = searchFlight.stream().filter(s -> s.getDeparture_date().equals(flight.getDeparture_date())).collect(Collectors.toList());
 		}
 		if(flight.getDest_airport() != null) {
-			searchFlight = searchFlight.stream().filter(s -> s.getDest_airport().getId().equals(flight.getDest_airport().getId())).collect(Collectors.toList());
+			searchFlight = searchFlight.stream().filter(s -> s.getDest_airport().getId().equals(flight.getDest_airport().getId()) || s.getDest_airport().getName().equals(flight.getDest_airport().getName())).collect(Collectors.toList());
 		}
 		if(flight.getOrigin_airport() != null) {
-			searchFlight = searchFlight.stream().filter(s -> s.getOrigin_airport().getId().equals(flight.getDest_airport().getId())).collect(Collectors.toList());
+			searchFlight = searchFlight.stream().filter(s -> s.getOrigin_airport().getId().equals(flight.getOrigin_airport().getId()) || s.getOrigin_airport().getName().equals(flight.getOrigin_airport().getName())).collect(Collectors.toList());
 		}
 		if(flight.getPrice() != 0) {
 			searchFlight = searchFlight.stream().filter(s -> s.getPrice() < flight.getPrice()).collect(Collectors.toList());
